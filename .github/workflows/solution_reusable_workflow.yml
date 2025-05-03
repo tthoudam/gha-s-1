@@ -9,5 +9,9 @@ jobs:
   workflow_call:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform Action
         run: terraform ${{ inputs.command }} -auto-approve -input=false
