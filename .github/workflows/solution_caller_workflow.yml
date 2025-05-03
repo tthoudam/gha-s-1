@@ -8,45 +8,38 @@ on:
 permissions:
   contents: read
 
+env:
+  runner-ubuntu: ubuntu-latest
+  environment-dev: dev
+
 jobs:
-  terraform:
-    name: 'Terraform'
-    runs-on: ubuntu-latest
-    environment: dev
+  checkout:
+    uses: actions/checkout@v4
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+  # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+  tf-setup:
+    uses: hashicorp/setup-terraform@v1
+    with:
+      cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+  tf-init:
+    uses: ./.github/workflows/solution_reusable_workflow.yml
+    with:
+      command: "init"
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  tf-format:
+    uses: ./.github/workflows/solution_reusable_workflow.yml
+    with:
+      command: "fmt"
 
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Test
-      run: |
-        cd .github/workflows
-        ls -ltr
-
-    - name: Terraform Format
-      run: terraform fmt -check
-
-    - name: Terraform Plan
-      uses: ./.github/workflows/solution_reusable_workflow.yml
-      with:
-        command: "plan"
-
-    - name: Terraform Apply
-      uses: ./.github/workflows/solution_reusable_workflow.yml
-      with:
-        command: "apply"
+  tf-plan:
+    uses: ./.github/workflows/solution_reusable_workflow.yml
+    with:
+      command: "plan"
+  
+  tf-apply:
+    needs: tf-plan
+    uses: ./.github/workflows/solution_reusable_workflow.yml
+    with:
+      command: "apply"
       

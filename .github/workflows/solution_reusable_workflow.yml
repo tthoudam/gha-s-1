@@ -6,14 +6,12 @@ on:
         required: true
         type: string
 jobs:
-  
-  my_workflow:
+  terraform-job:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Test
-      run: |
-        ls -ltr
-    - name: Terraform Action
-      run: terraform ${{ inputs.command }} -auto-approve -input=false
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Action
+        run: terraform ${{ inputs.command }} -auto-approve -input=false
