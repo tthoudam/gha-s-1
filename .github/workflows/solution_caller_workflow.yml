@@ -20,24 +20,23 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        run: terraform init
 
-  tf-init:
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "init"
+  tf_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terraform Format
+        run: terraform fmt -check
 
-  tf-format:
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "fmt"
-
-  tf-plan:
+  tf_plan:
+    needs: tf_check
     uses: ./.github/workflows/solution_reusable_workflow.yml
     with:
       command: "plan"
   
-  tf-apply:
-    needs: tf-plan
+  tf_apply:
+    needs: tf_plan
     uses: ./.github/workflows/solution_reusable_workflow.yml
     with:
       command: "apply"
