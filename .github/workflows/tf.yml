@@ -8,5 +8,7 @@ jobs:
   workflow_call:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: Terraform Action
       run: terraform ${{ inputs.command }} -auto-approve -input=false
