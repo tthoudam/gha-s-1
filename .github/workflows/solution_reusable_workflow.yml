@@ -6,6 +6,7 @@ on:
         required: true
         type: string
 jobs:
+  
   workflow_call:
     runs-on: ubuntu-latest
     steps:
