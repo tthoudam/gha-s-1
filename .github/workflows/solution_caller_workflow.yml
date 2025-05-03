@@ -8,10 +8,6 @@ on:
 permissions:
   contents: read
 
-env:
-  runner-ubuntu: ubuntu-latest
-  environment-dev: dev
-
 jobs:
   checkout:
     uses: actions/checkout@v4
