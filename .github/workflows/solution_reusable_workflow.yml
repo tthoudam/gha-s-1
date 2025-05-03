@@ -21,6 +21,9 @@ jobs:
               exit 1
               ;;
           esac
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
