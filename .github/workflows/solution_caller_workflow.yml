@@ -8,32 +8,10 @@ on:
 permissions:
   contents: read
 
+env:
+  runner-ubuntu: ubuntu-latest
+  environment-dev: dev
+
 jobs:
   checkout:
     uses: actions/checkout@v4
-
-  # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-  tf-setup:
-    uses: hashicorp/setup-terraform@v1
-
-  tf-init:
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "init"
-
-  tf-format:
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "fmt"
-
-  tf-plan:
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "plan"
-  
-  tf-apply:
-    needs: tf-plan
-    uses: ./.github/workflows/solution_reusable_workflow.yml
-    with:
-      command: "apply"
-      
