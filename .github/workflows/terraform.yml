@@ -13,6 +13,7 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: dev
+    
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -37,13 +38,11 @@ jobs:
 
     - name: Terraform Plan
       uses: ./.github/workflows/tf.yml
-      secrets: inherit
       with:
         command: "plan"
 
     - name: Terraform Apply
       uses: ./.github/workflows/tf.yml
-      secrets: inherit
       with:
         command: "apply"
       

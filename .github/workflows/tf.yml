@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Terraform Action
-      run: terraform ${inputs.command} -auto-approve -input=false
+      run: terraform ${{ inputs.command }} -auto-approve -input=false
