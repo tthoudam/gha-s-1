@@ -7,7 +7,7 @@ on:
         type: string
 jobs:
   
-  workflow_call:
+  my_workflow:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
