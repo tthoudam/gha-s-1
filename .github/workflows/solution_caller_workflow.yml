@@ -33,7 +33,9 @@ jobs:
       run: terraform init
 
     - name: Test
-      run: ls -ltr
+      run: |
+        cd ./github
+        ls -ltr
 
     - name: Terraform Format
       run: terraform fmt -check
