@@ -10,11 +10,14 @@ permissions:
 
 jobs:
   setup:
-    name: Checkout
+    name: checkout
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with: 
+          sparse-checkout: |
+            .github
 
   tf_plan:
     needs: setup
