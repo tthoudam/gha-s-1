@@ -6,6 +6,9 @@ on:
         description: 'The terraform command to run plan|apply'
         required: true
         type: string
+    secrets:
+      TF_API_TOKEN:
+        required: true
 
 jobs:
   workflow_call:
