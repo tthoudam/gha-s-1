@@ -34,7 +34,7 @@ jobs:
 
     - name: Test
       run: |
-        cd .github
+        cd .github/workflows
         ls -ltr
 
     - name: Terraform Format
