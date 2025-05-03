@@ -3,15 +3,32 @@ on:
   workflow_call:
     inputs:
       command:
+        description: 'The terraform command to run plan|apply'
         required: true
         type: string
+
 jobs:
   workflow_call:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate input
+        run: |
+          case "${{ inputs.command }}" in (plan|apply)
+              echo "Running valid command: ${{ inputs.command }}"
+              ;;
+            *)
+              echo "Invalid command: '${{ inputs.command }}'. Allowed: plan, apply"
+              exit 1
+              ;;
+          esac
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Terraform Action
-        run: terraform ${{ inputs.command }} -auto-approve
+        run: |
+          if [ "${{ inputs.command }}" = "apply" ]; then
+            terraform ${{ inputs.command }} -auto-approve -input=false
+          else
+            terraform ${{ inputs.command }} -input=false
+          fi
