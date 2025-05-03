@@ -1,0 +1,12 @@
+on:
+  workflow_call:
+    inputs:
+      command:
+        required: true
+        type: string
+jobs:
+  workflow_call:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Terraform Action
+      run: terraform ${inputs.command} -auto-approve -input=false
