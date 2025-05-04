@@ -26,6 +26,9 @@ jobs:
     with:
       command: "plan"
       work_dir: "."
+      service_account: ${{ vars.GH_TF_SERVICE_ACCOUNT }}
+      project_id: ${{ vars.GCP_PROJECT_ID }}
+      workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
     secrets:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
   

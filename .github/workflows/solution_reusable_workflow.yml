@@ -3,14 +3,26 @@ on:
   workflow_call:
     inputs:
       command:
-        description: 'The terraform command to run plan|apply'
+        description: "The terraform command to run plan|apply"
         required: true
         type: string
       work_dir:
-        description: 'The working directory'
+        description: "The terraform root directory"
         required: true
         type: string
         default: "."
+      project_id:
+        description: "Google Cloud Project ID"
+        required: true
+        type: string
+      workload_identity_provider:
+        description: "Google cloud workload identity provider"
+        required: true
+        type: string
+      service_account:
+        description: "The GCP service account to assume"
+        required: true
+        type: string
     secrets:
       TF_API_TOKEN:
         required: true
@@ -36,9 +48,9 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           token_format: 'access_token'
-          project_id: 'boreal-mode-295611'
-          workload_identity_provider: 'projects/232833671864/locations/global/workloadIdentityPools/github-actions-pool-2/providers/github-provider'
-          service_account: 'gha-terraform-sa@boreal-mode-295611.iam.gserviceaccount.com'
+          project_id: ${{ inputs.project_id }}
+          workload_identity_provider: ${{ inputs.workload_identity_provider }}
+          service_account: ${{ inputs.service_account }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
