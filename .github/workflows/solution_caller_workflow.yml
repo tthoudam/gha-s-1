@@ -25,7 +25,7 @@ jobs:
     uses: ./.github/workflows/solution_reusable_workflow.yml
     with:
       command: "plan"
-      work-dir: "."
+      work_dir: "."
     secrets:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
   
@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/solution_reusable_workflow.yml
     with:
       command: "apply"
-      work-dir: "."
+      work_dir: "."
     secrets:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       
