@@ -48,7 +48,7 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Action
+      - name: Terraform ${{ inputs.command }}
         run: |
           if [ "${{ inputs.command }}" = "apply" ]; then
             terraform ${{ inputs.command }} -auto-approve -input=false
