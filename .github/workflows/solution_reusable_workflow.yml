@@ -35,6 +35,7 @@ jobs:
       - name: Authenticate to Google Cloud using Workload Identity Federation
         uses: 'google-github-actions/auth@v2'
         with:
+          token_format: 'access_token'
           project_id: '232833671864'
           workload_identity_provider: 'projects/232833671864/locations/global/workloadIdentityPools/github-actions-pool/providers/google-beta'
   
