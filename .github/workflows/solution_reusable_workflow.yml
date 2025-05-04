@@ -36,7 +36,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           project_id: 'gha-s-1'
-          workload_identity_provider: 'projects/boreal-mode-295611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
+          workload_identity_provider: 'projects/232833671864/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
   
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
