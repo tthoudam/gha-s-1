@@ -1,4 +1,4 @@
-name: 'Deploy Terraform'
+name: "Deploy Terraform"
 
 on:
   push:
@@ -6,10 +6,11 @@ on:
 
 permissions:
   contents: read
-  id-token: 'write'
+  id-token: "write"
 
 env:
-  PROJECT_ID: 'boreal-mode-295611' # Google Cloud project ID
+  # Google Cloud project ID
+  PROJECT_ID: "boreal-mode-295611"
 
 jobs:
   setup:
@@ -40,7 +41,7 @@ jobs:
     with:
       command: "apply"
       service_account: ${{ vars.GH_TF_SERVICE_ACCOUNT }}
-      project_id: ${{ vars.GCP_PROJECT_ID }}
+      project_id: ${{ env.PROJECT_ID }}
       workload_identity_provider: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
       work_dir: "."
     secrets:
