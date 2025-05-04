@@ -6,6 +6,11 @@ on:
         description: 'The terraform command to run plan|apply'
         required: true
         type: string
+      work_dir:
+        description: 'The working directory'
+        required: true
+        type: string
+        default: "."
     secrets:
       TF_API_TOKEN:
         required: true
@@ -27,6 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Authenticate to Google Cloud using Workload Identity Federation
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'gha-s-1'
+          workload_identity_provider: 'projects/boreal-mode-295611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
+  
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -42,3 +53,4 @@ jobs:
           else
             terraform ${{ inputs.command }} -input=false
           fi
+        working-directory: ${{ inputs.work_dir }} 
