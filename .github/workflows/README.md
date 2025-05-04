@@ -1,40 +1,55 @@
-This workflow installs the latest version of Terraform CLI and configures the Terraform CLI configuration file
-with an API token for Terraform Cloud (app.terraform.io). On pull request events, this workflow will run
-`terraform init`, `terraform fmt`, and `terraform plan` (speculative plan via Terraform Cloud). On push events
-to the "main" branch, `terraform apply` will be executed.
+# Terraform Reusable GitHub Actions Workflow
 
-Documentation for `hashicorp/setup-terraform` is located here: https://github.com/hashicorp/setup-terraform
+This GitHub Actions **reusable workflow** provides an automated and secure way to run Terraform `plan` or `apply` commands in a Google Cloud environment using **Workload Identity Federation**.
 
-To use this workflow, you will need to complete the following setup steps.
+## 📌 Features
 
-1. Create a `main.tf` file in the root of this repository with the `remote` backend and one or more resources defined.
-  Example `main.tf`:
-    # The configuration for the `remote` backend.
-    terraform {
-      backend "remote" {
-        # The name of your Terraform Cloud organization.
-        organization = "example-organization"
+- Validates the requested Terraform command (`plan` or `apply`)
+- Authenticates to Google Cloud using Workload Identity Federation
+- Uses `hashicorp/setup-terraform` for Terraform CLI setup
+- Supports configurable working directory and GCP project settings
+- Designed to be reused across multiple repositories or workflows
 
-        # The name of the Terraform Cloud workspace to store Terraform state files in.
-        workspaces {
-          name = "example-workspace"
-        }
-      }
-    }
+## 🛠️ Usage
 
-    # An example resource that does nothing.
-    resource "null_resource" "example" {
-      triggers = {
-        value = "A example resource that does nothing!"
-      }
-    }
-2. Generate a Terraform Cloud user API token and store it as a GitHub secret (e.g. TF_API_TOKEN) on this repository.
-  Documentation:
-    - https://www.terraform.io/docs/cloud/users-teams-organizations/api-tokens.html
-    - https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
-3. Reference the GitHub secret in step using the `hashicorp/setup-terraform` GitHub Action.
-  Example:
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+To use this workflow in another workflow, add a `workflow_call` reference:
+
+```yaml
+name: Deploy Terraform
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    uses: your-org/your-repo/.github/workflows/solution_caller_workflow.yml@main
+    with:
+      command: apply
+      work_dir: ./infra
+      project_id: your-gcp-project-id
+      workload_identity_provider: projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+      service_account: terraform-deployer@your-gcp-project.iam.gserviceaccount.com
+    secrets:
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+```
+
+## 🔧 Inputs
+| Name                     | Description                                      | Required | Default |
+|--------------------------|--------------------------------------------------|----------|---------|
+| `command`                | The Terraform command to run (`plan` or `apply`) | ✅ Yes  | —       |
+| `work_dir`               | The Terraform working directory                  | ✅ Yes  | `.`     |
+| `project_id`             | Google Cloud project ID                          | ✅ Yes  | —       |
+| `workload_identity_provider` | The GCP Workload Identity Provider           | ✅ Yes  | —       |
+| `service_account`        | The GCP service account to assume                | ✅ Yes  | —       |
+
+## 🔐 Secrets
+
+| Name           | Description                                                             | Required |
+|----------------|-------------------------------------------------------------------------|----------|
+| `TF_API_TOKEN` | Terraform Cloud API token (optional if not using TFC CLI configuration) | ✅ Yes   |
+
+
+## 📚 Reference
+- **Setting up Workload Identity Federation (WIF) on Google Cloud:**
+  [Use GitHub Actions with Workload Identity Federation](https://github.com/google-github-actions/auth)
