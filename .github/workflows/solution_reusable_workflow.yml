@@ -36,7 +36,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           token_format: 'access_token'
-          project_id: '232833671864'
+          project_id: 'gha-s-1'
           workload_identity_provider: 'projects/232833671864/locations/global/workloadIdentityPools/github-actions-pool/providers/google-beta'
           service_account: 'gha-terraform-sa@boreal-mode-295611.iam.gserviceaccount.com'
 
